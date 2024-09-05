@@ -9,7 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+//use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class MediaController extends AbstractController
 {
@@ -17,9 +18,7 @@ class MediaController extends AbstractController
     {
     }
 
-    /**
-     * @Route("/admin/media", name="admin_media_index")
-     */
+    #[Route('/admin/media', name: 'admin_media_index')]
     public function index(Request $request): Response
     {
         $page = $request->query->getInt('page', 1);
@@ -45,9 +44,7 @@ class MediaController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/admin/media/add", name="admin_media_add")
-     */
+    #[Route('/admin/media/add', name: 'admin_media_add')]
     public function add(Request $request): Response
     {
         $media = new Media();
@@ -69,9 +66,7 @@ class MediaController extends AbstractController
         return $this->render('admin/media/add.html.twig', ['form' => $form->createView()]);
     }
 
-    /**
-     * @Route("/admin/media/delete/{id}", name="admin_media_delete")
-     */
+    #[Route('/admin/media/delete/{id}', name: 'admin_media_delete')]
     public function delete(int $id): RedirectResponse
     {
         $media = $this->entityManager->getRepository(Media::class)->find($id);
