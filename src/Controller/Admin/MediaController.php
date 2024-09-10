@@ -52,6 +52,9 @@ class MediaController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+//            dd($form->getErrors(true)); // Afficher toutes les erreurs
+
             if (!$this->isGranted('ROLE_ADMIN')) {
                 $media->setUser($this->getUser());
             }

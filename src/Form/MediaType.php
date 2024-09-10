@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class MediaType extends AbstractType
 {
@@ -19,9 +20,19 @@ class MediaType extends AbstractType
         $builder
             ->add('file', FileType::class, [
                 'label' => 'Image',
+                'required' => true,
+//                'constraints' => [
+//                    new Assert\File([
+//                        'maxSize' => '2M',
+//                        'mimeTypes' => ["image/jpg", "image/jpeg", "image/png"],
+//                        'mimeTypesMessage' => 'Veuillez télécharger une image valide (JPEG, PNG ou GIF).',
+//                        'maxSizeMessage' => 'La taille du fichier ne peut pas dépasser 2 Mo.',
+//                    ]),
+//                ]
             ])
             ->add('title', TextType::class, [
                 'label' => 'Titre',
+                'required' => true,
             ])
         ;
 

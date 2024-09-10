@@ -1,6 +1,14 @@
+#monolog:
+#    channels:
+#        - deprecation # Deprecations are logged in the dedicated "deprecation" channel when it exists
 monolog:
-    channels:
-        - deprecation # Deprecations are logged in the dedicated "deprecation" channel when it exists
+    channels: ['validation']
+    handlers:
+        validation:
+            type: stream
+            path: "%kernel.logs_dir%/%kernel.environment%.log"
+            level: debug
+            channels: ["validation"]
 
 when@dev:
     monolog:
