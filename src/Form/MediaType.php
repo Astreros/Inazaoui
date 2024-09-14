@@ -25,7 +25,7 @@ class MediaType extends AbstractType
 //                    new Assert\File([
 //                        'maxSize' => '2M',
 //                        'mimeTypes' => ["image/jpg", "image/jpeg", "image/png"],
-//                        'mimeTypesMessage' => 'Veuillez télécharger une image valide (JPEG, PNG ou GIF).',
+//                        'mimeTypesMessage' => 'Veuillez télécharger une image valide (JPEG, PNG).',
 //                        'maxSizeMessage' => 'La taille du fichier ne peut pas dépasser 2 Mo.',
 //                    ]),
 //                ]
