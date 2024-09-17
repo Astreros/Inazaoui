@@ -3,10 +3,10 @@
 {% block front %}
     <div class="row">
         <div class="col-12">
-            <h3 class="mb-4">{{ guest.name }}</h3>
+            <h3 class="mb-4">{{ guest.username }}</h3>
             <p class="mb-5 w-100">{{ guest.description }}</p>
             <div class="row">
-                {% for media in guest.medias %}
+                {% for media in guest.media %}
                     <div class="col-4 media mb-4">
                         <img class="w-100" src="{{ asset(media.path) }}" alt="{{ media.title }}">
                     </div>

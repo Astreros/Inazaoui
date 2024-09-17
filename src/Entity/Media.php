@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Repository\MediaRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MediaRepository::class)]
 class Media
@@ -15,49 +14,47 @@ class Media
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Album::class, fetch: "EAGER")]
-    private ?Album $album = null;
+    #[ORM\Column(length: 255)]
+    private ?string $path = null;
 
-    #[ORM\Column]
-    private string $path;
+    #[ORM\Column(length: 255)]
+    private ?string $title = null;
 
-    #[ORM\Column]
-    private string $title;
-
-    #[Assert\File(
-        maxSize: "2M",
-        mimeTypes: ["image/jpeg", "image/jpg","image/png"],
-        maxSizeMessage: "Le fichier ne peut dépasser 2 Mo.",
-        mimeTypesMessage: "Veuillez télécharger une image valide (JPG, JPEG, PNG)",
-    )]
     private ?UploadedFile $file = null;
 
-    #[ORM\ManyToOne(inversedBy: 'medias')]
-    private ?User $users = null;
+    #[ORM\ManyToOne]
+    private ?Album $album = null;
+
+    #[ORM\ManyToOne(inversedBy: 'media')]
+    private ?User $user = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getPath(): string
+    public function getPath(): ?string
     {
         return $this->path;
     }
 
-    public function setPath(string $path): void
+    public function setPath(string $path): static
     {
         $this->path = $path;
+
+        return $this;
     }
 
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    public function setTitle(string $title): void
+    public function setTitle(string $title): static
     {
         $this->title = $title;
+
+        return $this;
     }
 
     public function getFile(): ?UploadedFile
@@ -75,19 +72,21 @@ class Media
         return $this->album;
     }
 
-    public function setAlbum(?Album $album): void
+    public function setAlbum(?Album $album): static
     {
         $this->album = $album;
+
+        return $this;
     }
 
-    public function getUsers(): ?User
+    public function getUser(): ?User
     {
-        return $this->users;
+        return $this->user;
     }
 
-    public function setUsers(?User $users): static
+    public function setUser(?User $user): static
     {
-        $this->users = $users;
+        $this->user = $user;
 
         return $this;
     }

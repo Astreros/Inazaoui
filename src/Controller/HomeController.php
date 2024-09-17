@@ -8,7 +8,6 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-//use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Attribute\Route;
 
 class HomeController extends AbstractController
@@ -27,6 +26,7 @@ class HomeController extends AbstractController
     public function guests(): Response
     {
         $guests = $this->entityManager->getRepository(User::class)->findBy(['admin' => false]);
+
         return $this->render('front/guests.html.twig', [
             'guests' => $guests
         ]);
@@ -36,6 +36,7 @@ class HomeController extends AbstractController
     public function guest(int $id): Response
     {
         $guest = $this->entityManager->getRepository(User::class)->find($id);
+
         return $this->render('front/guest.html.twig', [
             'guest' => $guest
         ]);
@@ -50,7 +51,10 @@ class HomeController extends AbstractController
 
         $medias = $album
             ? $this->entityManager->getRepository(Media::class)->findByAlbum($album)
-            : $this->entityManager->getRepository(Media::class)->findByUsers($user);
+            : $this->entityManager->getRepository(Media::class)->findAll();
+
+//        dd($medias);
+
         return $this->render('front/portfolio.html.twig', [
             'albums' => $albums,
             'album' => $album,

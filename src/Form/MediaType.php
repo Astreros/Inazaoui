@@ -21,18 +21,23 @@ class MediaType extends AbstractType
             ->add('file', FileType::class, [
                 'label' => 'Image',
                 'required' => true,
-//                'constraints' => [
-//                    new Assert\File([
-//                        'maxSize' => '2M',
-//                        'mimeTypes' => ["image/jpg", "image/jpeg", "image/png"],
-//                        'mimeTypesMessage' => 'Veuillez télécharger une image valide (JPEG, PNG).',
-//                        'maxSizeMessage' => 'La taille du fichier ne peut pas dépasser 2 Mo.',
-//                    ]),
-//                ]
+                'constraints' => [
+                    new Assert\File([
+                        'maxSize' => '2M',
+                        'mimeTypes' => ["image/jpg", "image/jpeg", "image/png", "image/webp"],
+                        'mimeTypesMessage' => 'Veuillez télécharger une image valide (JPG/JPEG, PNG ou WEBP).',
+                        'maxSizeMessage' => 'La taille du fichier ne peut pas dépasser 2 Mo.',
+                    ]),
+                ],
             ])
             ->add('title', TextType::class, [
                 'label' => 'Titre',
                 'required' => true,
+//                'constraints' => [
+//                    new Assert\Length([
+//                        'max' => 5,
+//                    ])
+//                ]
             ])
         ;
 
@@ -42,7 +47,7 @@ class MediaType extends AbstractType
                     'label' => 'Utilisateur',
                     'required' => false,
                     'class' => User::class,
-                    'choice_label' => 'name',
+                    'choice_label' => 'username',
                 ])
                 ->add('album', EntityType::class, [
                     'label' => 'Album',

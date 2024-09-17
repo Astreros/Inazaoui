@@ -9,7 +9,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-//use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Attribute\Route;
 
 class MediaController extends AbstractController
@@ -65,6 +64,8 @@ class MediaController extends AbstractController
 
             return $this->redirectToRoute('admin_media_index');
         }
+
+//        dd($form->getErrors(true)); // Afficher toutes les erreurs
 
         return $this->render('admin/media/add.html.twig', ['form' => $form->createView()]);
     }

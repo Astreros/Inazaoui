@@ -9,7 +9,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-//use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Attribute\Route;
 
 class AlbumController extends AbstractController
@@ -21,7 +20,11 @@ class AlbumController extends AbstractController
     #[Route('/admin/album', name: 'admin_album_index')]
     public function index(): Response
     {
+
+
         $albums = $this->entityManager->getRepository(Album::class)->findAll();
+
+
 
         return $this->render('admin/album/index.html.twig', ['albums' => $albums]);
     }

@@ -29,29 +29,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     /**
-     * @var string The hashed password
+     * @var string|null The hashed password
      */
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 180, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $email = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $admin = null;
+
     /**
      * @var Collection<int, Media>
      */
-    #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'users')]
-    private Collection $medias;
-
-    #[ORM\Column]
-    private ?bool $admin = null;
+    #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'user')]
+    private Collection $media;
 
     public function __construct()
     {
-        $this->medias = new ArrayCollection();
+        $this->media = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -153,44 +153,44 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Media>
-     */
-    public function getMedias(): Collection
-    {
-        return $this->medias;
-    }
-
-    public function addMedia(Media $media): static
-    {
-        if (!$this->medias->contains($media)) {
-            $this->medias->add($media);
-            $media->setUsers($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMedia(Media $media): static
-    {
-        if ($this->medias->removeElement($media)) {
-            // set the owning side to null (unless already changed)
-            if ($media->getUsers() === $this) {
-                $media->setUsers(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function isAdmin(): ?bool
     {
         return $this->admin;
     }
 
-    public function setAdmin(bool $admin): static
+    public function setAdmin(?bool $admin): static
     {
         $this->admin = $admin;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Media>
+     */
+    public function getMedia(): Collection
+    {
+        return $this->media;
+    }
+
+    public function addMedium(Media $medium): static
+    {
+        if (!$this->media->contains($medium)) {
+            $this->media->add($medium);
+            $medium->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMedium(Media $medium): static
+    {
+        if ($this->media->removeElement($medium)) {
+            // set the owning side to null (unless already changed)
+            if ($medium->getUser() === $this) {
+                $medium->setUser(null);
+            }
+        }
 
         return $this;
     }

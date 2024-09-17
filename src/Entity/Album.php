@@ -13,7 +13,7 @@ class Album
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(length: 255)]
     private string $name;
 
     public function getId(): ?int
@@ -21,13 +21,15 @@ class Album
         return $this->id;
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName(string $name): void
+    public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
     }
 }

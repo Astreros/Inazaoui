@@ -15,7 +15,10 @@
         {{ form_label(form.file) }}
         {{ form_widget(form.file) }}
         {{ form_errors(form.file) }}
+
         <button type="submit" class="btn btn-primary">Ajouter</button>
+
+        {{ form_rest(form) }}
 
     {{ form_end(form) }}
 {% endblock %}

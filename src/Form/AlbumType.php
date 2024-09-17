@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class AlbumType extends AbstractType
 {
@@ -14,6 +15,13 @@ class AlbumType extends AbstractType
     {
         $builder->add('name', TextType::class, [
             'label' => 'Nom',
+            'required' => true,
+            'constraints' => [
+                new Assert\Length([
+                    'min' => 3,
+                    'max' => 16,
+                ])
+            ]
         ]);
     }
 
