@@ -7,7 +7,9 @@
     </div>
     {{ form_start(form) }}
         {{ form_row(form.name) }}
+
         <button type="submit" class="btn btn-primary">Ajouter</button>
+    {{ form_rest(form) }}
     {{ form_end(form) }}
 {% endblock %}
 
