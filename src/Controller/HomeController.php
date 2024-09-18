@@ -25,7 +25,10 @@ class HomeController extends AbstractController
     #[Route('/guests', name: 'guests')]
     public function guests(): Response
     {
-        $guests = $this->entityManager->getRepository(User::class)->findBy(['admin' => false]);
+        $guests = $this->entityManager->getRepository(User::class)->findBy([
+            'admin' => false,
+            'restricted' => false
+        ]);
 
         return $this->render('front/guests.html.twig', [
             'guests' => $guests
@@ -37,6 +40,14 @@ class HomeController extends AbstractController
     {
         $guest = $this->entityManager->getRepository(User::class)->find($id);
 
+        if (!$guest) {
+            return $this->redirectToRoute('guests');
+        }
+
+        if ($guest->isRestricted()) {
+            return $this->redirectToRoute('guests');
+        }
+
         return $this->render('front/guest.html.twig', [
             'guest' => $guest
         ]);
@@ -47,13 +58,10 @@ class HomeController extends AbstractController
     {
         $albums = $this->entityManager->getRepository(Album::class)->findAll();
         $album = $id ? $this->entityManager->getRepository(Album::class)->find($id) : null;
-        $user = $this->entityManager->getRepository(User::class)->findOneByAdmin(true);
 
         $medias = $album
-            ? $this->entityManager->getRepository(Media::class)->findByAlbum($album)
-            : $this->entityManager->getRepository(Media::class)->findAll();
-
-//        dd($medias);
+            ? $this->entityManager->getRepository(Media::class)->findAllMediasNotRestrictedByAlbum($album)
+            : $this->entityManager->getRepository(Media::class)->findAllMediasNotRestricted();
 
         return $this->render('front/portfolio.html.twig', [
             'albums' => $albums,

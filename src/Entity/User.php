@@ -46,8 +46,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Media>
      */
-    #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'user')]
+    #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'user', cascade: ['remove'])]
     private Collection $media;
+
+    #[ORM\Column]
+    private ?bool $restricted = null;
 
     public function __construct()
     {
@@ -191,6 +194,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $medium->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isRestricted(): ?bool
+    {
+        return $this->restricted;
+    }
+
+    public function setRestricted(bool $restricted): static
+    {
+        $this->restricted = $restricted;
 
         return $this;
     }

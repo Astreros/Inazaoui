@@ -10,7 +10,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_USER')]
 class MediaController extends AbstractController
 {
     public function __construct(private readonly EntityManagerInterface $entityManager)
@@ -52,8 +54,6 @@ class MediaController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-//            dd($form->getErrors(true)); // Afficher toutes les erreurs
-
             if (!$this->isGranted('ROLE_ADMIN')) {
                 $media->setUser($this->getUser());
             }
@@ -64,8 +64,6 @@ class MediaController extends AbstractController
 
             return $this->redirectToRoute('admin_media_index');
         }
-
-//        dd($form->getErrors(true)); // Afficher toutes les erreurs
 
         return $this->render('admin/media/add.html.twig', ['form' => $form->createView()]);
     }

@@ -24,6 +24,7 @@ class AppFixtures extends Fixture
         $adminUser->setDescription('Description utilisateur Ina');
         $adminUser->setRoles(['ROLE_ADMIN']);
         $adminUser->setAdmin(true);
+        $adminUser->setRestricted(false);
         $adminUser->setPassword($this->userPasswordHasher->hashPassword($adminUser, 'password'));
         $manager->persist($adminUser);
 
@@ -34,6 +35,7 @@ class AppFixtures extends Fixture
         $user->setDescription('Description utilisateur Akira');
         $user->setRoles(['ROLE_USER']);
         $user->setAdmin(false);
+        $user->setRestricted(false);
         $user->setPassword($this->userPasswordHasher->hashPassword($user, 'password'));
         $manager->persist($user);
 

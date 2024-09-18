@@ -33,11 +33,12 @@ class MediaType extends AbstractType
             ->add('title', TextType::class, [
                 'label' => 'Titre',
                 'required' => true,
-//                'constraints' => [
-//                    new Assert\Length([
-//                        'max' => 5,
-//                    ])
-//                ]
+            ])
+            ->add('album', EntityType::class, [
+                'label' => 'Album',
+                'required' => false,
+                'class' => Album::class,
+                'choice_label' => 'name',
             ])
         ;
 
@@ -48,12 +49,6 @@ class MediaType extends AbstractType
                     'required' => false,
                     'class' => User::class,
                     'choice_label' => 'username',
-                ])
-                ->add('album', EntityType::class, [
-                    'label' => 'Album',
-                    'required' => false,
-                    'class' => Album::class,
-                    'choice_label' => 'name',
                 ])
             ;
         }
