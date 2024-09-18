@@ -18,9 +18,9 @@
                 <td>{{ guest.username }}</td>
                 <td>
                     {% if guest.restricted == false %}
-                        <a href="{{ path('admin_guest_block', {id: guest.id}) }}" class="btn btn-warning">Restreindre accès</a>
+                        <a href="{{ path('admin_guest_block', {id: guest.id}) }}" class="btn btn-warning">Bloquer l'accès</a>
                     {% else %}
-                        <a href="{{ path('admin_guest_unblock', {id: guest.id}) }}" class="btn btn-secondary">Ouvrir accès</a>
+                        <a href="{{ path('admin_guest_unblock', {id: guest.id}) }}" class="btn btn-secondary">Débloquer l'accès</a>
                     {% endif %}
                     <a href="{{ path('admin_guest_delete', {id: guest.id}) }}" class="btn btn-danger">Supprimer</a>
                 </td>
