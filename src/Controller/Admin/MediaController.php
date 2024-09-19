@@ -72,7 +72,20 @@ class MediaController extends AbstractController
     public function delete(int $id): RedirectResponse
     {
         $media = $this->entityManager->getRepository(Media::class)->find($id);
-        $this->entityManager->remove($media);
+
+        if (!$media) {
+            $this->addFlash('error', 'Media not found.');
+            return $this->redirectToRoute('admin_media_index');
+        }
+
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $this->entityManager->remove($media);
+        } else if ($media->getUser() === $this->getUser()) {
+            $this->entityManager->remove($media);
+        } else {
+            return $this->redirectToRoute('admin_media_index');
+        }
+
         $this->entityManager->flush();
         unlink($media->getPath());
 
