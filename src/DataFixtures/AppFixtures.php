@@ -39,6 +39,17 @@ class AppFixtures extends Fixture
         $user->setPassword($this->userPasswordHasher->hashPassword($user, 'password'));
         $manager->persist($user);
 
+        // Création d'un utilisateur restreint avec ROLE_USER
+        $userRestricted = new User();
+        $userRestricted->setUsername('minato');
+        $userRestricted->setEmail('minato@mail.com');
+        $userRestricted->setDescription('Description utilisateur Minato');
+        $userRestricted->setRoles(['ROLE_USER']);
+        $userRestricted->setAdmin(false);
+        $userRestricted->setRestricted(true);
+        $userRestricted->setPassword($this->userPasswordHasher->hashPassword($userRestricted, 'password'));
+        $manager->persist($userRestricted);
+
         // Création albums
         $albumNature = new Album();
         $albumNature->setName('Nature');
@@ -100,7 +111,21 @@ class AppFixtures extends Fixture
             $manager->persist($media);
         }
 
+        // Création des médias pour l'utilisateur restreint
+        $media = new Media();
+        $media->setPath("uploads/userRestricted-6749295_fixtures.webp");
+        $media->setTitle('Ville userRestricted');
+        $media->setAlbum($albumVilles);
+        $media->setUser($userRestricted);
+        $manager->persist($media);
+
+        $media = new Media();
+        $media->setPath("uploads/userRestricted-9024880_fixtures.webp");
+        $media->setTitle('Nature userRestricted');
+        $media->setAlbum($albumNature);
+        $media->setUser($userRestricted);
+        $manager->persist($media);
+
         $manager->flush();
     }
 }
-
