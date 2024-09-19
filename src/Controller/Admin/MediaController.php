@@ -58,9 +58,11 @@ class MediaController extends AbstractController
                 $media->setUser($this->getUser());
             }
             $media->setPath('uploads/' . md5(uniqid('', true)) . '.' . $media->getFile()->guessExtension());
-            $media->getFile()->move('uploads/', $media->getPath());
+            $media->getFile()->move($this->getParameter('kernel.project_dir') . '/public/uploads/', $media->getPath());
             $this->entityManager->persist($media);
             $this->entityManager->flush();
+
+            $this->addFlash('success', 'Média ajouté avec succès.');
 
             return $this->redirectToRoute('admin_media_index');
         }
