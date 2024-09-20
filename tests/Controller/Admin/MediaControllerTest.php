@@ -112,20 +112,20 @@ class MediaControllerTest extends WebTestCase
         unlink(self::getContainer()->getParameter('kernel.project_dir') . '/public/' . $media->getPath()); // Supprime le fichier
     }
 
-    private function createUploadedFile(string $filename, string $mimeType): UploadedFile
-    {
-        $path = 'public/uploads/' . $filename;
-
-        file_put_contents($path, 'Contenu de test');
-
-        return new UploadedFile(
-            $path,
-            $filename,
-            $mimeType,
-            null,
-            true
-        );
-    }
+//    private function createUploadedFile(string $filename): UploadedFile
+//    {
+//        $path = self::getContainer()->getParameter('kernel.project_dir') . '/public/uploads/' . $filename;
+//
+//        file_put_contents($path, 'Contenu de test');
+//
+//        return new UploadedFile(
+//            $path,
+//            $filename,
+//            'image/jpeg',
+//            null,
+//            true
+//        );
+//    }
 
     protected function tearDown(): void
     {
