@@ -38,8 +38,14 @@ class SecurityControllerTest extends WebTestCase
             'restricted' => false
         ]);
 
-        $this->client->loginUser($user);
-        $this->client->request('GET', '/login');
+        $crawler = $this->client->request('GET', '/login');
+
+        $form = $crawler->selectButton('Connexion')->form([
+            'username' => $user->getUsername(),
+            'password' => 'password'
+        ]);
+
+        $this->client->submit($form);
         self::assertResponseRedirects('/');
 
         $this->client->followRedirect();
@@ -52,13 +58,58 @@ class SecurityControllerTest extends WebTestCase
             'restricted' => true
         ]);
 
-        $this->client->request('POST', '/login', [
+        $crawler = $this->client->request('GET', '/login');
+
+        $form = $crawler->selectButton('Connexion')->form([
             'username' => $restrictedUser->getUsername(),
             'password' => 'password'
         ]);
 
+        $this->client->submit($form);
+        self::assertResponseRedirects('/login');
+
         $this->client->followRedirect();
         self::assertSelectorTextContains('div', 'Votre compte est restreint.');
+    }
+
+    public function testIncorrectUsername(): void
+    {
+        $restrictedUser = $this->entityManager->getRepository(User::class)->findOneBy([
+            'restricted' => false
+        ]);
+
+        $crawler = $this->client->request('GET', '/login');
+
+        $form = $crawler->selectButton('Connexion')->form([
+            'username' => 'incorrectUsername',
+            'password' => 'password'
+        ]);
+
+        $this->client->submit($form);
+        self::assertResponseRedirects('/login');
+
+        $this->client->followRedirect();
+        self::assertSelectorTextContains('div', 'Identifiants incorrects.');
+    }
+
+    public function testIncorrectPassword(): void
+    {
+        $restrictedUser = $this->entityManager->getRepository(User::class)->findOneBy([
+            'restricted' => false
+        ]);
+
+        $crawler = $this->client->request('GET', '/login');
+
+        $form = $crawler->selectButton('Connexion')->form([
+            'username' => $restrictedUser->getUsername(),
+            'password' => 'incorrectPassword'
+        ]);
+
+        $this->client->submit($form);
+        self::assertResponseRedirects('/login');
+
+        $this->client->followRedirect();
+        self::assertSelectorTextContains('div', 'Identifiants incorrects.');
     }
 
     public function testLogoutRedirectsUser(): void

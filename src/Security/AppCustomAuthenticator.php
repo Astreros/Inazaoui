@@ -45,7 +45,7 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $username]);
 
         if (!$user) {
-            $request->getSession()->set('authentication_error', 'Utilisateur non trouvé.');
+            $request->getSession()->set('authentication_error', 'Identifiants incorrects.');
             throw new AuthenticationException('Utilisateur non trouvé.');
         }
 
