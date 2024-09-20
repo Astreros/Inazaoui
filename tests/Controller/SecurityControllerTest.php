@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Tests\Controller\Admin;
+namespace App\Tests\Controller;
 
 use App\DataFixtures\AppFixtures;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class SecurityControllerTest extends WebTestCase
 {
@@ -44,6 +44,21 @@ class SecurityControllerTest extends WebTestCase
 
         $this->client->followRedirect();
         self::assertSelectorExists('a[href="/logout"]');
+    }
+
+    public function testRestrictedUserCannotLogin(): void
+    {
+        $restrictedUser = $this->entityManager->getRepository(User::class)->findOneBy([
+            'restricted' => true
+        ]);
+
+        $this->client->request('POST', '/login', [
+            'username' => $restrictedUser->getUsername(),
+            'password' => 'password'
+        ]);
+
+        $this->client->followRedirect();
+        self::assertSelectorTextContains('div', 'Votre compte est restreint.');
     }
 
     public function testLogoutRedirectsUser(): void

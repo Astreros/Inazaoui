@@ -15,18 +15,20 @@
                 <div class="position-sticky">
                     <h1 class="text-black">Connexion</h1>
                     {% if error %}
-                        <div class="alert alert-danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                        <div class="alert alert-danger" role="alert">{{ error }}</div>
                     {% endif %}
                     <form method="post">
                         <div class="mb-3">
-                            <label for="username" class="form-label">Nom d'utilisateur</label>
-                            <input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}" required>
+                            <label for="inputUsername">Username</label>
+                            <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" autocomplete="username" required autofocus>
                         </div>
                         <div class="mb-3">
-                            <label for="password" class="form-label">Mot de passe</label>
-                            <input type="password" class="form-control" id="password" name="_password" required>
+                            <label for="inputPassword">Password</label>
+                            <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
                         </div>
-                        <button type="submit" class="btn btn-primary">Connexion</button>
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                        <button class="btn btn-lg btn-primary" type="submit">Connexion</button>
                     </form>
                 </div>
             </nav>
