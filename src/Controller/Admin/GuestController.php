@@ -81,7 +81,7 @@ class GuestController extends AbstractController
     {
         foreach ($user->getMedia() as $media) {
             $this->entityManager->remove($media);
-            unlink($media->getPath());
+            unlink($this->getParameter('kernel.project_dir') . '/public/uploads/', $media->getPath());
         }
 
         $this->entityManager->remove($user);
