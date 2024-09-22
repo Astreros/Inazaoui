@@ -1,0 +1,64 @@
+name: Continuous integration
+on:
+    push:
+        branches:
+            - main
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        services:
+            mysql:
+                image: mysql:8.0
+                env:
+                    MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+                    MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+                    MYSQL_USER: ${{ secrets.MYSQL_USER }}
+                    MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+                ports:
+                    - 3306:3306
+                options: >-
+                    --health-cmd="mysqladmin ping"
+                    --health-interval=10s
+                    --health-timeout=5s
+                    --health-retries=3
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Set up PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '8.2'
+                  extensions: mbstring, intl, pdo_mysql
+                  ini-values: post_max_size=256M, upload_max_filesize=256M
+                  coverage: none
+
+            - name: Install dependencies
+              run: |
+                  composer install --prefer-dist --no-progress --no-suggest
+
+            - name: Set up the .env.test file
+              run: |
+                  echo "DATABASE_URL=mysql://${{ secrets.MYSQL_USER }}:${{ secrets.MYSQL_PASSWORD }}@127.0.0.1:3306/${{ secrets.MYSQL_DATABASE }}" > .env.test
+                  php bin/console doctrine:database:create --env=test
+                  php bin/console doctrine:schema:update --force --env=test
+
+            - name: Run tests
+              run: |
+                  vendor/bin/phpunit --testdox
+
+            - name: Upload test results to GitHub
+              uses: actions/upload-artifact@v3
+              with:
+                  name: test-results
+                  path: build/logs
+
+            - name: Cache Composer dependencies
+              uses: actions/cache@v3
+              with:
+                  path: vendor
+                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-composer-

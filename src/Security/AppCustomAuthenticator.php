@@ -51,7 +51,7 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
 
         if (!$this->userPasswordHasher->isPasswordValid($user, $password)) {
             $request->getSession()->set('authentication_error', 'Identifiants incorrects.');
-            throw new AuthenticationException('Identifiants incorrects.');
+            throw new AuthenticationException('Mot de passe incorrects.');
         }
 
         if ($user->isRestricted()) {
