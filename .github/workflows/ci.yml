@@ -41,9 +41,6 @@ jobs:
               run: |
                   echo "DATABASE_URL=mysql://root:${{ secrets.MYSQL_ROOT_PASSWORD }}@127.0.0.1:3306/${{ secrets.MYSQL_DATABASE }}" > .env.test
 
-            - name: Drop the test database
-              run: php bin/console doctrine:database:drop --force --env=test
-
             - name: Create the test database
               run: php bin/console doctrine:database:create --env=test
 
