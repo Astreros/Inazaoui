@@ -11,7 +11,7 @@ jobs:
             mysql:
                 image: mariadb:10.4
                 env:
-#                    MARIADB_ROOT_PASSWORD: ${{ secrets.MARIADB_ROOT_PASSWORD }}
+                    MARIADB_ROOT_PASSWORD: ${{ secrets.MARIADB_ROOT_PASSWORD }}
                     MARIADB_DATABASE: ${{ secrets.MARIADB_DATABASE }}
                     MARIADB_USER: ${{ secrets.MARIADB_USER }}
                     MARIADB_PASSWORD: ${{ secrets.MARIADB_PASSWORD }}
