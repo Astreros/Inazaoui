@@ -12,9 +12,9 @@ jobs:
                 image: mariadb:10.4
                 env:
                     MARIADB_ROOT_PASSWORD: ${{ secrets.MARIADB_ROOT_PASSWORD }}
-                    MARIADB_DATABASE: ${{ secrets.MARIADB_DATABASE }}
-                    MARIADB_USER: ${{ secrets.MARIADB_USER }}
-                    MARIADB_PASSWORD: ${{ secrets.MARIADB_PASSWORD }}
+#                    MARIADB_DATABASE: ${{ secrets.MARIADB_DATABASE }}
+#                    MARIADB_USER: ${{ secrets.MARIADB_USER }}
+#                    MARIADB_PASSWORD: ${{ secrets.MARIADB_PASSWORD }}
                 ports:
                     - 3306:3306
                 options: >-
@@ -41,7 +41,7 @@ jobs:
 
             - name: Set up the .env.test file
               run: |
-                  echo "DATABASE_URL=mysql://root:@localhost/${{ secrets.MARIADB_DATABASE }}?serverVersion=8.2&charset=utf8mb4" > .env.test
+                  echo "DATABASE_URL=mysql://root@localhost/inazaoui?serverVersion=8.2&charset=utf8mb4" > .env.test
 
             - name: test
               run: |
