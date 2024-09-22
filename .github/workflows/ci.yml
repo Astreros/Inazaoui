@@ -41,7 +41,7 @@ jobs:
 
             - name: Set up the .env.test file
               run: |
-                  echo "DATABASE_URL=mysql://root:${{ secrets.MYSQL_ROOT_PASSWORD }}@127.0.0.1:3306/${{ secrets.MYSQL_DATABASE }}?serverVersion=8.2&charset=utf8mb4" > .env.test
+                  echo "DATABASE_URL=mysql://root:@127.0.0.1:3306/${{ secrets.MYSQL_DATABASE }}?serverVersion=8.2&charset=utf8mb4" > .env.test
 
             - name: Create the test database
               run: php bin/console doctrine:database:create --env=test
