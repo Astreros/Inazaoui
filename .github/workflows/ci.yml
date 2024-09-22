@@ -43,6 +43,10 @@ jobs:
               run: |
                   echo "DATABASE_URL=mysql://${{ secrets.MARIADB_USER }}:${{ secrets.MARIADB_PASSWORD }}@127.0.0.1:3306/${{ secrets.MARIADB_DATABASE }}?serverVersion=8.2&charset=utf8mb4" > .env.test
 
+            - name: test
+              run: |
+                  mysql -h 127.0.0.1 -u root -p${{ secrets.MARIADB_ROOT_PASSWORD }} -e "SHOW DATABASES;"
+
             - name: Create the test database
               run: php bin/console doctrine:database:create --env=test
 
