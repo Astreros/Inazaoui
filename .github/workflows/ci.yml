@@ -40,6 +40,12 @@ jobs:
             - name: Set up the .env.test file
               run: |
                   echo "DATABASE_URL=mysql://root:${{ secrets.MYSQL_ROOT_PASSWORD }}@127.0.0.1:3306/${{ secrets.MYSQL_DATABASE }}?serverVersion=8.2&charset=utf8mb4" > .env.test
+            - name: Wait for MySQL to be ready
+              run: |
+                  until mysqladmin ping -h127.0.0.1 -uroot -p${{ secrets.MYSQL_ROOT_PASSWORD }} --silent; do
+                      echo "Waiting for MySQL..."
+                      sleep 2
+                  done
 
             - name: Create the test database
               run: php bin/console doctrine:database:create --env=test
