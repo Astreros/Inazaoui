@@ -10,8 +10,8 @@ jobs:
         services:
             mysql:
                 image: mariadb:10.4
-                env:
-                    MARIADB_ROOT_PASSWORD: ${{ secrets.MARIADB_ROOT_PASSWORD }}
+#                env:
+#                    MARIADB_ROOT_PASSWORD: ${{ secrets.MARIADB_ROOT_PASSWORD }}
 #                    MARIADB_DATABASE: ${{ secrets.MARIADB_DATABASE }}
 #                    MARIADB_USER: ${{ secrets.MARIADB_USER }}
 #                    MARIADB_PASSWORD: ${{ secrets.MARIADB_PASSWORD }}
@@ -42,10 +42,6 @@ jobs:
             - name: Set up the .env.test file
               run: |
                   echo "DATABASE_URL=mysql://root@localhost/inazaoui?serverVersion=8.2&charset=utf8mb4" > .env.test
-
-            - name: test
-              run: |
-                  mysql -h 127.0.0.1 -u root -p${{ secrets.MARIADB_ROOT_PASSWORD }} -e "SHOW DATABASES;"
 
             - name: Create the test database
               run: php bin/console doctrine:database:create --env=test
