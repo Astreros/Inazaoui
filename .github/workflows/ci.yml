@@ -9,7 +9,7 @@ jobs:
 
         services:
             mysql:
-                image: mysql:10.4
+                image: mysql:10
                 env:
                     MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
                     MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
