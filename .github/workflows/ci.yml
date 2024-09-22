@@ -40,8 +40,12 @@ jobs:
             - name: Set up the .env.test file
               run: |
                   echo "DATABASE_URL=mysql://root:${{ secrets.MYSQL_ROOT_PASSWORD }}@127.0.0.1:3306/${{ secrets.MYSQL_DATABASE }}" > .env.test
-                  php bin/console doctrine:database:create --env=test
-                  php bin/console doctrine:schema:update --force --env=test
+
+            - name: Drop the test database
+              run: php bin/console doctrine:database:drop --force --env=test
+
+            - name: Create the test database
+              run: php bin/console doctrine:database:create --env=test
 
             - name: Run migrations
               run: php bin/console doctrine:migrations:migrate --no-interaction --env=test
