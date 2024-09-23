@@ -40,22 +40,16 @@ jobs:
 
       - name: Set up the .env.test file
         run: |
-          echo "DATABASE_URL=mysql://root:${{ secrets.MARIADB_ROOT_PASSWORD }}@localhost/${{ secrets.MARIADB_DATABASE }}?serverVersion=8.2&charset=utf8mb4" > .env.test
-
-      - name: Sleep for 5 seconds
-        run: sleep 5
+          echo "DATABASE_URL=mysql://root:${{ secrets.MARIADB_ROOT_PASSWORD }}@localhost:3306/${{ secrets.MARIADB_DATABASE }}?serverVersion=10.4&charset=utf8mb4" > .env.test
 
       - name: Create the test database
         run: php bin/console doctrine:database:create --env=test
 
-      - name: Sleep for 5 seconds
-        run: sleep 5
+      - name: Sleep for 10 seconds
+        run: sleep 10
 
       - name: Run migrations
         run: php bin/console doctrine:migrations:migrate --no-interaction --env=test
-
-      - name: Sleep for 5 seconds
-        run: sleep 5
 
       - name: Run tests
         run: |
