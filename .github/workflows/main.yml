@@ -15,6 +15,7 @@ jobs:
           MARIADB_DATABASE: ${{ secrets.MARIADB_DATABASE }}
           MARIADB_USER: ${{ secrets.MARIADB_USER }}
           MARIADB_PASSWORD: ${{ secrets.MARIADB_PASSWORD }}
+          DATABASE_ENDPOINT: 127.0.0.1
         ports:
           - 3306:3306
         options: >-
