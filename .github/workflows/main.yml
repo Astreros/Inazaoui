@@ -22,6 +22,7 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
+          --host=127.0.0.1
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -45,9 +46,6 @@ jobs:
       - name: Create the test database
         run: php bin/console doctrine:database:create --env=test
 
-      - name: Sleep for 10 seconds
-        run: sleep 10
-
       - name: Run migrations
         run: php bin/console doctrine:migrations:migrate --no-interaction --env=test
 
@@ -55,7 +53,7 @@ jobs:
         run: |
           vendor/bin/phpunit
         env:
-          DATABASE_ENDPOINT: 127.0.0.1
+          DATABASE_ENDPOINT: 127.0.0.1:3306
 
       - name: Upload test results to GitHub
         uses: actions/upload-artifact@v3
