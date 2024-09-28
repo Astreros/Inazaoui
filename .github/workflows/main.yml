@@ -42,6 +42,8 @@ jobs:
       - name: Set up the .env.test file
         run: |
           echo "DATABASE_URL=mysql://root:${{ MARIADB_ROOT_PASSWORD }}@127.0.0.1:3306/${{ MARIADB_DATABASE }}?serverVersion=10.4&charset=utf8mb4" > .env.test
+        env:
+          DATABASE_ENDPOINT: 127.0.0.1
 
       - name: Create the test database
         run: php bin/console doctrine:database:create --env=test
