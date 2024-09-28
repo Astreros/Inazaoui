@@ -22,7 +22,6 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
-          --host=127.0.0.1
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
