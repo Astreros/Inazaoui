@@ -41,8 +41,6 @@ jobs:
       - name: Set up the .env.test file
         run: |
           echo "DATABASE_URL=mysql://root:${{ secrets.MARIADB_ROOT_PASSWORD }}@127.0.0.1:3306/${{ secrets.MARIADB_DATABASE }}?serverVersion=8.2&charset=utf8mb4" > .env.test
-        env:
-          DATABASE_ENDPOINT: 127.0.0.1
 
       - name: Create the test database
         run: php bin/console doctrine:database:create --env=test
@@ -56,6 +54,8 @@ jobs:
       - name: Run tests
         run: |
           vendor/bin/phpunit
+        env:
+          DATABASE_ENDPOINT: 127.0.0.1
 
       - name: Upload test results to GitHub
         uses: actions/upload-artifact@v3
