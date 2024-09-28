@@ -11,11 +11,11 @@ jobs:
       mysql:
         image: mariadb:10.4
         env:
+          DATABASE_ENDPOINT: 127.0.0.1
           MARIADB_ROOT_PASSWORD: ${{ secrets.MARIADB_ROOT_PASSWORD }}
           MARIADB_DATABASE: ${{ secrets.MARIADB_DATABASE }}
           MARIADB_USER: ${{ secrets.MARIADB_USER }}
           MARIADB_PASSWORD: ${{ secrets.MARIADB_PASSWORD }}
-          DATABASE_ENDPOINT: 127.0.0.1
         ports:
           - 3306:3306
         options: >-
@@ -41,7 +41,7 @@ jobs:
 
       - name: Set up the .env.test file
         run: |
-          echo "DATABASE_URL=mysql://root:${{ MARIADB_ROOT_PASSWORD }}@127.0.0.1:3306/${{ MARIADB_DATABASE }}?serverVersion=8.2&charset=utf8mb4" > .env.test
+          echo "DATABASE_URL=mysql://root:${{ MARIADB_ROOT_PASSWORD }}@127.0.0.1:3306/${{ MARIADB_DATABASE }}?serverVersion=10.4&charset=utf8mb4" > .env.test
 
       - name: Create the test database
         run: php bin/console doctrine:database:create --env=test
