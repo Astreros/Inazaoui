@@ -52,7 +52,8 @@ jobs:
         run: |
           vendor/bin/phpunit
         env:
-          DATABASE_ENDPOINT: 127.0.0.1:3306
+          KERNEL_CLASS: 'App\Kernel'
+          DATABASE_ENDPOINT: 127.0.0.1
 
       - name: Upload test results to GitHub
         uses: actions/upload-artifact@v3
