@@ -55,12 +55,6 @@ jobs:
           KERNEL_CLASS: 'App\Kernel'
           DATABASE_ENDPOINT: 127.0.0.1
 
-      - name: Upload test results to GitHub
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-results
-          path: build/logs
-
       - name: Cache Composer dependencies
         uses: actions/cache@v3
         with:
