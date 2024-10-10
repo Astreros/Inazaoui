@@ -42,7 +42,7 @@ class MediaType extends AbstractType
             ])
         ;
 
-        if ($options['is_admin']) {
+        if ($options['is_admin'] === true) {
             $builder
                 ->add('user', EntityType::class, [
                     'label' => 'Utilisateur',

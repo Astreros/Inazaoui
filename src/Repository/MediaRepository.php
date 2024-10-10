@@ -17,6 +17,9 @@ class MediaRepository extends ServiceEntityRepository
         parent::__construct($registry, Media::class);
     }
 
+    /**
+     * @return Media[] Returns an array of Media objects
+     */
     public function findAllMediasNotRestricted(): array
     {
         return $this->createQueryBuilder('media')
@@ -26,6 +29,9 @@ class MediaRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @return Media[] Returns an array of Media objects
+     */
     public function findAllMediasNotRestrictedByAlbum(Album $album): array
     {
         return $this->createQueryBuilder('media')

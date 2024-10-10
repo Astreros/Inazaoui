@@ -138,6 +138,11 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/webmozart/assert" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/common" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/liip/test-fixtures-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/phpstan/phpstan" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/phpstan/phpstan-doctrine" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/phpstan/phpstan-phpunit" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/phpstan/phpstan-strict-rules" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/phpstan/phpstan-symfony" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

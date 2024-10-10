@@ -14,7 +14,9 @@ class SecurityController extends AbstractController
     #[Route(path: '/login', name: 'admin_login')]
     public function login(Request $request ,AuthenticationUtils $authenticationUtils): Response
     {
-         if ($this->getUser()) {
+        $user = $this->getUser();
+
+         if ($user !== null) {
              return $this->redirectToRoute('home');
          }
 

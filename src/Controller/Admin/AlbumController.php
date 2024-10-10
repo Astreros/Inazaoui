@@ -64,6 +64,12 @@ class AlbumController extends AbstractController
     public function delete(int $id): RedirectResponse
     {
         $media = $this->entityManager->getRepository(Album::class)->find($id);
+
+        if ($media === null) {
+            $this->addFlash('error', 'Media not found.');
+            return $this->redirectToRoute('admin_media_index');
+        }
+
         $this->entityManager->remove($media);
         $this->entityManager->flush();
 

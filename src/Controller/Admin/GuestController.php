@@ -45,7 +45,13 @@ class GuestController extends AbstractController
             $guest->setAdmin(false);
             $guest->setRestricted(false);
 
-            $guest->setPassword($this->userPasswordHasher->hashPassword($guest, $guest->getPassword()));
+            $plainPassword = $guest->getPassword();
+            if ($plainPassword !== null) {
+                $guest->setPassword($this->userPasswordHasher->hashPassword($guest, $plainPassword));
+            } else {
+                $this->addFlash('error', 'Le mot de passe est requis.');
+                return $this->render('admin/guest/add.html.twig', ['form' => $form->createView()]);
+            }
 
             $this->entityManager->persist($guest);
             $this->entityManager->flush();
@@ -80,8 +86,11 @@ class GuestController extends AbstractController
     public function delete(User $user): RedirectResponse
     {
         foreach ($user->getMedia() as $media) {
-            $this->entityManager->remove($media);
-            unlink($this->getParameter('kernel.project_dir') . '/public/uploads/', $media->getPath());
+            $filePath = $this->getParameter('kernel.project_dir') . '/../public/' . $media->getPath();
+
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
         }
 
         $this->entityManager->remove($user);

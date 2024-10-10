@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Media;
+use App\Entity\User;
 use App\Form\MediaType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -55,10 +56,22 @@ class MediaController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             if (!$this->isGranted('ROLE_ADMIN')) {
-                $media->setUser($this->getUser());
+                $user = $this->getUser();
+
+                if ($user instanceof User){
+                    $media->setUser($user);
+                }
             }
-            $media->setPath('uploads/' . md5(uniqid('', true)) . '.' . $media->getFile()->guessExtension());
-            $media->getFile()->move($this->getParameter('kernel.project_dir') . '/public/uploads/', $media->getPath());
+
+            $file = $media->getFile();
+            if ($file !== null) {
+                $media->setPath('uploads/' . md5(uniqid('', true)) . '.' . $file->guessExtension());
+                $file->move($this->getParameter('kernel.project_dir') . '/public/uploads/', $media->getPath());
+            } else {
+                $this->addFlash('error', "Aucun fichier n'a été téléchargé.");
+                return $this->render('admin/media/add.html.twig', ['form' => $form->createView()]);
+            }
+
             $this->entityManager->persist($media);
             $this->entityManager->flush();
 
@@ -75,21 +88,28 @@ class MediaController extends AbstractController
     {
         $media = $this->entityManager->getRepository(Media::class)->find($id);
 
-        if (!$media) {
+        if ($media === null) {
             $this->addFlash('error', 'Media not found.');
             return $this->redirectToRoute('admin_media_index');
         }
 
-        if ($this->isGranted('ROLE_ADMIN')) {
+        $user = $this->getUser();
+
+        if ($this->isGranted('ROLE_ADMIN') || ($media->getUser() === $user)) {
             $this->entityManager->remove($media);
-        } else if ($media->getUser() === $this->getUser()) {
-            $this->entityManager->remove($media);
+            $this->entityManager->flush();
+
+            $path = $media->getPath();
+            if ($path !== null) {
+                $fullPath = $this->getParameter('kernel.project_dir') . '/public/' . $path;
+                if (file_exists($fullPath)) {
+                    unlink($fullPath);
+                }
+            }
+
         } else {
             return $this->redirectToRoute('admin_media_index');
         }
-
-        $this->entityManager->flush();
-        unlink($media->getPath());
 
         return $this->redirectToRoute('admin_media_index');
     }

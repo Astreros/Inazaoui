@@ -55,6 +55,11 @@ jobs:
           KERNEL_CLASS: 'App\Kernel'
           DATABASE_ENDPOINT: 127.0.0.1
 
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse
+        env:
+          KERNEL_CLASS: 'App\Kernel'
+
       - name: Cache Composer dependencies
         uses: actions/cache@v3
         with:

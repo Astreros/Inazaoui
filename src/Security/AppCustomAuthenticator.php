@@ -44,7 +44,7 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
 
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $username]);
 
-        if (!$user) {
+        if ($user === null) {
             $request->getSession()->set('authentication_error', 'Identifiants incorrects.');
             throw new AuthenticationException('Utilisateur non trouvé.');
         }
@@ -54,7 +54,7 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
             throw new AuthenticationException('Mot de passe incorrects.');
         }
 
-        if ($user->isRestricted()) {
+        if ($user->isRestricted() === true) {
             $request->getSession()->set('authentication_error', 'Votre compte est restreint.');
             throw new AuthenticationException('Votre compte est restreint.');
         }
@@ -73,7 +73,9 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
 
-        if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
+        $targetPath = $this->getTargetPath($request->getSession(), $firewallName);
+
+        if ($targetPath !== null) {
             return new RedirectResponse($targetPath);
         }
 

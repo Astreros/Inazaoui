@@ -53,11 +53,11 @@ class HomeController extends AbstractController
     {
         $guest = $this->entityManager->getRepository(User::class)->find($id);
 
-        if (!$guest) {
+        if ($guest === null) {
             return $this->redirectToRoute('guests');
         }
 
-        if ($guest->isRestricted()) {
+        if ($guest->isRestricted() === true) {
             return $this->redirectToRoute('guests');
         }
 
@@ -70,11 +70,17 @@ class HomeController extends AbstractController
     public function portfolio(?int $id = null): Response
     {
         $albums = $this->entityManager->getRepository(Album::class)->findAll();
-        $album = $id ? $this->entityManager->getRepository(Album::class)->find($id) : null;
+        $album = null;
 
-        $medias = $album
-            ? $this->entityManager->getRepository(Media::class)->findAllMediasNotRestrictedByAlbum($album)
-            : $this->entityManager->getRepository(Media::class)->findAllMediasNotRestricted();
+        if ($id !== null) {
+            $album = $this->entityManager->getRepository(Album::class)->find($id);
+        }
+
+        if ($album !== null) {
+            $medias = $this->entityManager->getRepository(Media::class)->findAllMediasNotRestrictedByAlbum($album);
+        } else {
+            $medias = $this->entityManager->getRepository(Media::class)->findAllMediasNotRestricted();
+        }
 
         return $this->render('front/portfolio.html.twig', [
             'albums' => $albums,
