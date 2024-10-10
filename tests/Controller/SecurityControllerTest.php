@@ -12,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class SecurityControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
-    private mixed $entityManager;
+    private EntityManagerInterface $entityManager;
 
     protected function setUp(): void
     {
@@ -37,6 +37,7 @@ class SecurityControllerTest extends WebTestCase
         $user = $this->entityManager->getRepository(User::class)->findOneBy([
             'restricted' => false
         ]);
+        self::assertNotNull($user);
 
         $crawler = $this->client->request('GET', '/login');
 
@@ -57,6 +58,7 @@ class SecurityControllerTest extends WebTestCase
         $restrictedUser = $this->entityManager->getRepository(User::class)->findOneBy([
             'restricted' => true
         ]);
+        self::assertNotNull($restrictedUser);
 
         $crawler = $this->client->request('GET', '/login');
 
@@ -77,6 +79,7 @@ class SecurityControllerTest extends WebTestCase
         $restrictedUser = $this->entityManager->getRepository(User::class)->findOneBy([
             'restricted' => false
         ]);
+        self::assertNotNull($restrictedUser);
 
         $crawler = $this->client->request('GET', '/login');
 
@@ -97,6 +100,7 @@ class SecurityControllerTest extends WebTestCase
         $restrictedUser = $this->entityManager->getRepository(User::class)->findOneBy([
             'restricted' => false
         ]);
+        self::assertNotNull($restrictedUser);
 
         $crawler = $this->client->request('GET', '/login');
 
@@ -117,6 +121,7 @@ class SecurityControllerTest extends WebTestCase
         $user = $this->entityManager->getRepository(User::class)->findOneBy([
             'restricted' => false
         ]);
+        self::assertNotNull($user);
 
         $this->client->loginUser($user);
         $this->client->request('GET', '/logout');
@@ -129,7 +134,6 @@ class SecurityControllerTest extends WebTestCase
     protected function tearDown(): void
     {
         $this->entityManager->close();
-        $this->entityManager = null;
 
         parent::tearDown();
     }

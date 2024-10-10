@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class MediaControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
-    private mixed $entityManager;
+    private EntityManagerInterface $entityManager;
 
     protected function setUp(): void
     {
@@ -33,6 +33,7 @@ class MediaControllerTest extends WebTestCase
         $admin = $this->entityManager->getRepository(User::class)->findOneBy([
             'admin' => true,
         ]);
+        self::assertNotNull($admin);
 
         $this->client->loginUser($admin);
 
@@ -41,7 +42,10 @@ class MediaControllerTest extends WebTestCase
 
         $medias = $this->entityManager->getRepository(Media::class)->findAll();
         foreach ($medias as $media) {
-            self::assertAnySelectorTextContains('td', $media->getTitle());
+            $title = $media->getTitle();
+            self::assertNotNull($title);
+
+            self::assertAnySelectorTextContains('td', $title);
         }
     }
 
@@ -50,10 +54,12 @@ class MediaControllerTest extends WebTestCase
         $user = $this->entityManager->getRepository(User::class)->findOneBy([
             'admin' => false,
         ]);
+        self::assertNotNull($user);
 
         $admin = $this->entityManager->getRepository(User::class)->findOneBy([
             'admin' => true,
         ]);
+        self::assertNotNull($admin);
 
         $this->client->loginUser($user);
 
@@ -64,14 +70,20 @@ class MediaControllerTest extends WebTestCase
             'user' => $user,
         ]);
         foreach ($ownedMedias as $media) {
-            self::assertAnySelectorTextContains('td', $media->getTitle());
+            $title = $media->getTitle();
+            self::assertNotNull($title);
+
+            self::assertAnySelectorTextContains('td', $title);
         }
 
         $adminMedias = $this->entityManager->getRepository(Media::class)->findBy([
             'user' => $admin,
         ]);
         foreach ($adminMedias as $media) {
-            self::assertAnySelectorTextNotContains('td', $media->getTitle());
+            $title = $media->getTitle();
+            self::assertNotNull($title);
+
+            self::assertAnySelectorTextNotContains('td', $title);
         }
     }
 
@@ -80,8 +92,10 @@ class MediaControllerTest extends WebTestCase
         $admin = $this->entityManager->getRepository(User::class)->findOneBy([
             'admin' => true,
         ]);
+        self::assertNotNull($admin);
 
         $album = $this->entityManager->getRepository(Album::class)->findOneBy([]);
+        self::assertNotNull($album);
 
         $this->client->loginUser($admin);
 
@@ -130,7 +144,6 @@ class MediaControllerTest extends WebTestCase
     protected function tearDown(): void
     {
         $this->entityManager->close();
-        $this->entityManager = null;
 
         parent::tearDown();
     }

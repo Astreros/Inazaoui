@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class GuestControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
-    private mixed $entityManager;
+    private EntityManagerInterface $entityManager;
 
     protected function setUp(): void
     {
@@ -31,6 +31,8 @@ class GuestControllerTest extends WebTestCase
         $admin = $this->entityManager->getRepository(User::class)->findOneBy([
             'admin' => true,
         ]);
+        self::assertNotNull($admin);
+
         $this->client->loginUser($admin);
 
         $this->client->request('GET', '/admin/guest');
@@ -41,7 +43,10 @@ class GuestControllerTest extends WebTestCase
         ]);
 
         foreach ($guests as $guest) {
-            self::assertAnySelectorTextContains('td', $guest->getUsername());
+            $username = $guest->getUsername();
+            self::assertNotNull($username);
+
+            self::assertAnySelectorTextContains('td', $username);
         }
     }
 
@@ -50,6 +55,8 @@ class GuestControllerTest extends WebTestCase
         $admin = $this->entityManager->getRepository(User::class)->findOneBy([
             'admin' => true,
         ]);
+        self::assertNotNull($admin);
+
         $this->client->loginUser($admin);
 
         $crawler = $this->client->request('GET', '/admin/guest/add');
@@ -78,10 +85,12 @@ class GuestControllerTest extends WebTestCase
         $admin = $this->entityManager->getRepository(User::class)->findOneBy([
             'admin' => true,
         ]);
+        self::assertNotNull($admin);
         $guest = $this->entityManager->getRepository(User::class)->findOneBy([
             'admin' => false,
             'restricted' => false,
         ]);
+        self::assertNotNull($guest);
 
         $this->client->loginUser($admin);
 
@@ -89,6 +98,7 @@ class GuestControllerTest extends WebTestCase
         self::assertResponseRedirects('/admin/guest');
 
         $updatedGuest = $this->entityManager->getRepository(User::class)->find($guest->getId());
+        self::assertNotNull($updatedGuest);
         self::assertTrue($updatedGuest->isRestricted());
     }
 
@@ -97,10 +107,13 @@ class GuestControllerTest extends WebTestCase
         $admin = $this->entityManager->getRepository(User::class)->findOneBy([
             'admin' => true,
         ]);
+        self::assertNotNull($admin);
+
         $guest = $this->entityManager->getRepository(User::class)->findOneBy([
             'admin' => false,
             'restricted' => true,
         ]);
+        self::assertNotNull($guest);
 
         $this->client->loginUser($admin);
 
@@ -108,6 +121,7 @@ class GuestControllerTest extends WebTestCase
         self::assertResponseRedirects('/admin/guest');
 
         $updatedGuest = $this->entityManager->getRepository(User::class)->find($guest->getId());
+        self::assertNotNull($updatedGuest);
         self::assertFalse($updatedGuest->isRestricted());
     }
 
@@ -131,6 +145,8 @@ class GuestControllerTest extends WebTestCase
         $admin = $this->entityManager->getRepository(User::class)->findOneBy([
             'admin' => true,
         ]);
+        self::assertNotNull($admin);
+
         $this->client->loginUser($admin);
 
         $this->client->request('GET', '/admin/guest/delete/' . $user->getId());
@@ -143,7 +159,6 @@ class GuestControllerTest extends WebTestCase
     protected function tearDown(): void
     {
         $this->entityManager->close();
-        $this->entityManager = null;
 
         parent::tearDown();
     }

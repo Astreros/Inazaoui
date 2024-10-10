@@ -14,7 +14,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 class HomeControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
-    private mixed $entityManager;
+    private EntityManagerInterface $entityManager;
 
     protected function setUp(): void
     {
@@ -53,6 +53,7 @@ class HomeControllerTest extends WebTestCase
             'admin' => false,
             'restricted' => true,
         ]);
+        self::assertNotNull($guestRestricted);
 
         $this->client->request('GET', '/guest/' . $guestRestricted->getId());
         self::assertResponseRedirects('/guests');
@@ -64,10 +65,15 @@ class HomeControllerTest extends WebTestCase
             'admin' => false,
             'restricted' => false,
         ]);
+        self::assertNotNull($guest);
 
         $this->client->request('GET', '/guest/' . $guest->getId());
         self::assertResponseIsSuccessful();
-        self::assertSelectorTextContains('h3', $guest->getUsername());
+
+        $username = $guest->getUsername();
+        self::assertNotNull($username);
+
+        self::assertSelectorTextContains('h3', $username);
     }
 
     public function testPortfolioPageWithoutId(): void
@@ -117,7 +123,6 @@ class HomeControllerTest extends WebTestCase
     protected function tearDown(): void
     {
         $this->entityManager->close();
-        $this->entityManager = null;
 
         parent::tearDown();
     }

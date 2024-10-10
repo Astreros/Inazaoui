@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class AlbumControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
-    private mixed $entityManager;
+    private EntityManagerInterface $entityManager;
 
     protected function setUp(): void
     {
@@ -31,6 +31,8 @@ class AlbumControllerTest extends WebTestCase
         $admin = $this->entityManager->getRepository(User::class)->findOneBy([
             'admin' => true,
         ]);
+        self::assertNotNull($admin);
+
         $this->client->loginUser($admin);
 
         $this->client->request('GET', '/admin/album');
@@ -38,7 +40,9 @@ class AlbumControllerTest extends WebTestCase
 
         $albums = $this->entityManager->getRepository(Album::class)->findAll();
         foreach ($albums as $album) {
-            self::assertAnySelectorTextContains('td', $album->getName());
+            $albumName = $album->getName();
+            self::assertNotNull($albumName);
+            self::assertAnySelectorTextContains('td', $albumName);
         }
     }
 
@@ -47,6 +51,8 @@ class AlbumControllerTest extends WebTestCase
         $admin = $this->entityManager->getRepository(User::class)->findOneBy([
             'admin' => true,
         ]);
+        self::assertNotNull($admin);
+
         $this->client->loginUser($admin);
 
         $crawler = $this->client->request('GET', '/admin/album/add');
@@ -65,6 +71,7 @@ class AlbumControllerTest extends WebTestCase
             'name' => 'testAddAlbum',
         ]);
 
+        self::assertNotNull($album);
         self::assertAnySelectorTextContains('td', 'testAddAlbum');
     }
 
@@ -73,6 +80,8 @@ class AlbumControllerTest extends WebTestCase
         $admin = $this->entityManager->getRepository(User::class)->findOneBy([
             'admin' => true,
         ]);
+        self::assertNotNull($admin);
+
         $this->client->loginUser($admin);
 
         $album = new Album();
@@ -102,6 +111,8 @@ class AlbumControllerTest extends WebTestCase
         $admin = $this->entityManager->getRepository(User::class)->findOneBy([
             'admin' => true,
         ]);
+        self::assertNotNull($admin);
+
         $this->client->loginUser($admin);
 
         $album = new Album();
@@ -120,7 +131,6 @@ class AlbumControllerTest extends WebTestCase
     protected function tearDown(): void
     {
         $this->entityManager->close();
-        $this->entityManager = null;
 
         parent::tearDown();
     }
