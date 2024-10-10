@@ -126,6 +126,18 @@ class AppFixtures extends Fixture
         $media->setUser($userRestricted);
         $manager->persist($media);
 
+        for ($i = 1; $i <= 100; $i++) {
+            $userTest = new User();
+            $userTest->setUsername("userTest{$i}");
+            $userTest->setEmail("userTest{$i}@mail.com");
+            $userTest->setDescription("Description utilisateur userTest{$i}");
+            $userTest->setRoles(['ROLE_USER']);
+            $userTest->setAdmin(false);
+            $userTest->setRestricted(false);
+            $userTest->setPassword($this->userPasswordHasher->hashPassword($userTest, 'password'));
+            $manager->persist($userTest);
+        }
+
         $manager->flush();
     }
 }

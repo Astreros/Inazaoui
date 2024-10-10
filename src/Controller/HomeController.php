@@ -7,6 +7,7 @@ use App\Entity\Media;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -23,15 +24,27 @@ class HomeController extends AbstractController
     }
 
     #[Route('/guests', name: 'guests')]
-    public function guests(): Response
+    public function guests(Request $request): Response
     {
-        $guests = $this->entityManager->getRepository(User::class)->findBy([
-            'admin' => false,
-            'restricted' => false
-        ]);
+        $page = $request->query->getInt('page', 1);
+
+        $criteria = [];
+        $criteria['admin'] = false;
+        $criteria['restricted'] = false;
+
+        $guests = $this->entityManager->getRepository(User::class)->findBy(
+            $criteria,
+            ['id' => 'ASC'],
+            25,
+            25 * ($page - 1)
+        );
+
+        $total = $this->entityManager->getRepository(User::class)->count($criteria);
 
         return $this->render('front/guests.html.twig', [
-            'guests' => $guests
+            'guests' => $guests,
+            'total' => $total,
+            'page' => $page,
         ]);
     }
 
