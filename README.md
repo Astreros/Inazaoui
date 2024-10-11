@@ -1,5 +1,14 @@
 # Ina Zaoui
 
+## Description du projet
+
+Ce projet Symfony est un site web pour la photographe Ina Zaoui. Il lui permet de mettre en ligne et de gérer ses photos, mais également d'avoir des utilisateurs invités, avec un espace de gestion limité à leurs propres images.
+L'administrateur du site dispose d'un espace d'administration pour gérer l'ensemble des photos, gérer l'ensemble des albums et gérer l'ensemble des utilisateurs (création, modération, suppression).
+
+## Structure du projet
+
+
+
 ## Pré-requis
 * PHP >= 8.2
 * Composer

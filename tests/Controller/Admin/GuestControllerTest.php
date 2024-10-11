@@ -3,7 +3,6 @@
 namespace App\Tests\Controller\Admin;
 
 use App\DataFixtures\AppFixtures;
-use App\Entity\Media;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;

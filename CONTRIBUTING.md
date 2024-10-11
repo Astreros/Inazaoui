@@ -5,8 +5,8 @@ Merci de l'intérêt que vous portez à la contribution à ce projet ! Voici que
 ## Pré-requis
 Avant de commencer, assurez-vous d'avoir installé les outils suivants :
 - PHP >= 8.2
-- Symfony >= 7.1
 - Composer
+- Extension PHP XDebug
 
 ## Comment contribuer
 
@@ -27,4 +27,7 @@ Avant de commencer, assurez-vous d'avoir installé les outils suivants :
 Avant de soumettre une pull request, assurez-vous que tous les tests passent :
 ```bash
 symfony php bin/phpunit
+```
+```bash
+vendor/bin/phpstan analyse
 ```
