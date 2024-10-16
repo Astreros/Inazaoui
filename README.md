@@ -7,7 +7,10 @@ L'administrateur du site dispose d'un espace d'administration pour gérer l'ense
 
 ## Structure du projet
 
+Les controller sont structurés en deux parties, tout d'abord un HomeController et SecurityController pour gérer les pages public du site et une partie Admin pour les pages accessible après connexion. 
+Les tests reprennent la même structure.  
 
+SecurityController s'occupe de l'affiche de la page de connexion et de la route /logout. Security/AppCustomAuthenticator s'occupe de la logique de connexion personnalisée.  
 
 ## Pré-requis
 * PHP >= 8.2

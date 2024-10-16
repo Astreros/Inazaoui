@@ -106,9 +106,6 @@ class MediaController extends AbstractController
                     unlink($fullPath);
                 }
             }
-
-        } else {
-            return $this->redirectToRoute('admin_media_index');
         }
 
         return $this->redirectToRoute('admin_media_index');
